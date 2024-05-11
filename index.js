@@ -14,7 +14,7 @@ connectToDatabase()
 
 
 app.get('/', (req, res) => {
-    res.send('<h1>Welcome to Blog API</h1><br /><a href="https://github.com/Emie-Boro/altschool-backend-assessment">View Documentation</a>')
+    res.send('<h1>Welcome to Blog API</h1><br /><a href="https://github.com/Emie-Boro/altschool-backend-assessment" target=_blank>View Documentation</a><br /><a href="https://altschool-backend-assessment.onrender.com/blog" target=_blank>View Blog</a>')
 })
 
 app.use('/blog', blog)
