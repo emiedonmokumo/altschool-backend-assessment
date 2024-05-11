@@ -58,82 +58,81 @@ The `auth.js` file configures Passport authentication strategies for the applica
 
 # Blog API Documentation
 
-This API provides endpoints to manage a blog system including creating, reading, updating, and deleting articles.
+## Introduction
+
+This is the documentation for the RESTful API of the blog application. The API is built using Node.js with Express.js framework and MongoDB for data storage. It provides endpoints for creating, retrieving, updating, and deleting articles, as well as user authentication for protected routes.
 
 ## Authentication
 
-Authentication is required for certain routes using JSON Web Tokens (JWT).
+To access protected routes, you need to authenticate using JSON Web Tokens (JWT). Send a POST request to `/login` with valid credentials to obtain a token. The token should be included in the `Authorization` header for subsequent requests.
 
 ## Routes
 
 ### Create New Article
 
-- **URL**: `/api/articles/new`
-- **Method**: `POST`
-- **Authentication**: Required
-- **Request Body**:
-  - `title`: Title of the article (String)
-  - `description`: Description of the article (String)
-  - `state`: State of the article (String, either 'published' or 'draft')
-  - `body`: Body/content of the article (String)
-  - `tags`: Tags associated with the article (Array of Strings)
-- **Response**: 
-  - `message`: Success message
-  - `blog`: Newly created article object
+- **URL:** `/blog/new`
+- **Method:** `POST`
+- **Authentication:** Required (JWT)
+- **Request Body:**
+  - `title`: String (required) - Title of the article
+  - `description`: String (required) - Brief description of the article
+  - `state`: String (required) - State of the article (published/draft)
+  - `body`: String (required) - Content of the article
+- **Response:**
+  - `message`: String - Success message
+  - `blog`: Object - Created article object
 
 ### Get Articles
 
-- **URL**: `/api/articles`
-- **Method**: `GET`
-- **Query Parameters**:
-  - `page`: Page number for pagination (Optional, default: 1)
-  - `limit`: Number of articles per page (Optional, default: 20)
-  - `read_count`: Sort articles by read count (Optional, default: -1)
-  - `title`: Search articles by title (Optional)
-  - `tags`: Search articles by tags (Optional, comma-separated list)
-- **Response**: 
-  - Array of article objects
+- **URL:** `/blog`
+- **Method:** `GET`
+- **Query Parameters:**
+  - `page`: Number - Page number (default: 1)
+  - `limit`: Number - Number of articles per page (default: 20)
+  - `read_count`: Number - Sort articles by read count (default: -1)
+  - `title`: String - Search articles by title
+- **Response:** Array of article objects
 
 ### Get User's Articles
 
-- **URL**: `/api/articles/user`
-- **Method**: `GET`
-- **Authentication**: Required
-- **Query Parameters**:
-  - `page`: Page number for pagination (Optional, default: 1)
-  - `limit`: Number of articles per page (Optional, default: 20)
-  - `state`: Filter articles by state (Optional, default: 'published', 'draft')
-- **Response**: 
-  - Array of user's article objects
+- **URL:** `/blog/user`
+- **Method:** `GET`
+- **Authentication:** Required (JWT)
+- **Query Parameters:**
+  - `page`: Number - Page number (default: 1)
+  - `limit`: Number - Number of articles per page (default: 20)
+  - `state`: String or Array - State of articles (published/draft, default: both)
+- **Response:** Array of user's article objects
 
 ### Get Article by ID
 
-- **URL**: `/api/articles/:id`
-- **Method**: `GET`
-- **URL Parameters**:
-  - `id`: ID of the article
-- **Response**: 
-  - `article`: Article object
-  - `author`: Author information (ID, name, email)
+- **URL:** `/blog/:id`
+- **Method:** `GET`
+- **Path Parameters:**
+  - `id`: String (required) - ID of the article
+- **Response:**
+  - `article`: Object - Article details
+  - `author`: Object - Author details (name and email)
 
 ### Update Article
 
-- **URL**: `/api/articles/:id`
-- **Method**: `PUT`
-- **Authentication**: Required
-- **URL Parameters**:
-  - `id`: ID of the article
-- **Request Body**: Updated article data
-- **Response**: 
-  - Success message
-  - Updated article object
+- **URL:** `/blog/:id`
+- **Method:** `PUT`
+- **Authentication:** Required (JWT)
+- **Path Parameters:**
+  - `id`: String (required) - ID of the article
+- **Request Body:** Updated article fields
+- **Response:**
+  - `message`: String - Success message
+  - `article`: Object - Updated article object
 
 ### Delete Article
 
-- **URL**: `/api/articles/:id`
-- **Method**: `DELETE`
-- **Authentication**: Required
-- **URL Parameters**:
-  - `id`: ID of the article
-- **Response**: 
-  - Success message
+- **URL:** `/blog/:id`
+- **Method:** `DELETE`
+- **Authentication:** Required (JWT)
+- **Path Parameters:**
+  - `id`: String (required) - ID of the article
+- **Response:**
+  - `message`: String - Success message
+
