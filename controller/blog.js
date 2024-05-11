@@ -26,7 +26,7 @@ router.post('/new', passport.authenticate('jwt', { session: false }), async (req
 
 router.get('/', async (req, res) => {
     const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 20
+    const limit = parseInt(req.query.limit) || 5
     const skip = (page - 1) * limit;
     try {
         const articles = await ArticleModel.find().sort({ read_count: -1 }).skip(skip).limit(limit).exec()
