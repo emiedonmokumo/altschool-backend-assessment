@@ -25,8 +25,15 @@ router.post('/new', passport.authenticate('jwt', { session: false }), async (req
 })
 
 router.get('/', async (req, res) => {
-    const articles = await ArticleModel.find()
-    res.status(200).json(articles)
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20
+    const skip = (page - 1) * limit;
+    try {
+        const articles = await ArticleModel.find().sort({ read_count: -1 }).skip(skip).limit(limit).exec()
+        res.status(200).json(articles)
+    } catch (error) {
+        res.status(500).json({message: error.message})
+    }
 })
 
 router.get('/user', passport.authenticate('jwt', { session: false }), async (req, res) => {
@@ -36,6 +43,8 @@ router.get('/user', passport.authenticate('jwt', { session: false }), async (req
 
 router.get('/:id', async (req, res) => {
     const article = await ArticleModel.findOne({ _id: req.params.id, state: 'published' });
+
+    await ArticleModel.updateOne({ _id: article._id }, { $inc: { read_count: 1 } }, { new: true })
 
     const user = await UserModel.findById(article.author)
     if (!article) {

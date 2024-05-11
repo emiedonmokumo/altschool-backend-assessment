@@ -3,6 +3,7 @@ const app = express()
 const signup = require('./controller/signup')
 const login = require('./controller/login')
 const blog = require('./controller/blog')
+const pagination = require('./controller/pagination')
 require('dotenv').config()
 const bodyParser = require('body-parser')
 
@@ -20,5 +21,6 @@ app.get('/', (req, res) => {
 app.use('/blog', blog)
 app.use('/signup', signup)
 app.use('/login', login)
+app.use('/page', pagination)
 
 app.listen(3000, console.log('Server Started'))

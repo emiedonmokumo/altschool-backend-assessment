@@ -17,7 +17,8 @@ const articleSchema = new Schema({
         required: true
     },
     read_count: {
-        type: Number
+        type: Number,
+        default: 0
     },
     tags: String,
     body: {
