@@ -1,6 +1,8 @@
 # AltSchool Africa Backend Assessment
 
-## [Blog API](https://altschool-backend-assessment.onrender.com/blog)
+## [Blog API](https://altschool-backend-assessment.onrender.com/)
+### https://altschool-backend-assessment.onrender.com/
+
 An API created with Express, Passport, JSON Web Token and MongoDB
 
 ---
