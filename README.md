@@ -3,8 +3,58 @@
 ## [Blog API](https://altschool-backend-assessment.onrender.com/blog)
 An API created with Express, Passport, JSON Web Token and MongoDB
 
-Certainly! Below is the documentation for your Express.js API routes, generated from the provided code, suitable for your GitHub README.md file:
+---
+# Authentication API Documentation
+This API provides endpoints for user authentication including signup and login using email and password.
 
+## Signup
+
+- **URL**: `/api/auth/signup`
+- **Method**: `POST`
+- **Request Body**:
+  - `email`: User's email address (String)
+  - `password`: User's password (String)
+  - `firstname`: User's first name (String)
+  - `surname`: User's last name (String)
+- **Response**: 
+  - `message`: Success message
+  - `user`: Newly created user object
+
+## Login
+
+- **URL**: `/api/auth/login`
+- **Method**: `POST`
+- **Request Body**:
+  - `email`: User's email address (String)
+  - `password`: User's password (String)
+- **Response**: 
+  - `token`: JWT token for authentication
+
+## Passport Authentication Strategies
+
+### JWT Strategy
+
+- **Name**: JWT Strategy
+- **Description**: This strategy verifies JWT tokens sent by clients in the Authorization header.
+- **Usage**:
+  - It extracts JWT token from the Authorization header.
+  - Verifies the token using the provided JWT secret.
+  - Returns the user object associated with the token if it's valid.
+
+### Local Strategy
+
+- **Name**: Local Strategy
+- **Description**: This strategy authenticates users using their email and password.
+- **Usage**:
+  - It verifies user credentials against the database.
+  - If the user is found and the password is correct, it returns the user object.
+  - If the user is not found or the password is incorrect, it returns an error message.
+
+## Passport Configuration
+
+The `auth.js` file configures Passport authentication strategies for the application.
+
+---
 
 # Blog API Documentation
 
