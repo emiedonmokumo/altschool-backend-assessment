@@ -30,8 +30,15 @@ router.get('/', async (req, res) => {
     const limit = parseInt(req.query.limit) || 20
     const sortCount = parseInt(req.query.read_count) || -1
     const skip = (page - 1) * limit;
+
+    // search
+    const title = req.query.title;
     try {
-        const articles = await ArticleModel.find({ state: 'published' }).sort({ read_count: sortCount, timestamp: -1, reading_time: -1 }).skip(skip).limit(limit).exec()
+        let query = { state: 'published' };
+
+        if (title) query.title = { $regex: title, $options: 'i' };
+
+        const articles = await ArticleModel.find(query).sort({ read_count: sortCount, timestamp: -1, reading_time: -1 }).skip(skip).limit(limit).exec()
         res.status(200).json(articles)
     } catch (error) {
         res.status(500).json({ message: error.message })
