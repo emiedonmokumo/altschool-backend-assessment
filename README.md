@@ -1,6 +1,6 @@
 # AltSchool Africa Backend Assessment
 
-## (Blog API)[https://altschool-backend-assessment.onrender.com/blog]
+## [Blog API](https://altschool-backend-assessment.onrender.com/blog)
 An API created with Express, Passport, JSON Web Token and MongoDB
 
 Certainly! Below is the documentation for your Express.js API routes, generated from the provided code, suitable for your GitHub README.md file:
