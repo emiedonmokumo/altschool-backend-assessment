@@ -14,7 +14,7 @@ connectToDatabase()
 
 
 app.get('/', (req, res) => {
-    res.send('working...')
+    res.send('<h1>Welcome to Blog API</h1>')
 })
 
 app.use('/blog', blog)
