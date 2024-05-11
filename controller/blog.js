@@ -2,6 +2,7 @@ const express = require('express')
 const passport = require('passport')
 const ArticleModel = require('../models/Article')
 const UserModel = require('../models/User')
+const wordCount = require('../middleware/wordCount')
 const router = express.Router()
 
 router.post('/new', passport.authenticate('jwt', { session: false }), async (req, res) => {
@@ -11,7 +12,7 @@ router.post('/new', passport.authenticate('jwt', { session: false }), async (req
             description: req.body.description,
             author: req.user._id,
             state: req.body.state,
-            reading_time: req.body.reading_time,
+            reading_time: wordCount(req.body.body),
             tags: req.body.tags,
             body: req.body.body
         })
@@ -26,18 +27,24 @@ router.post('/new', passport.authenticate('jwt', { session: false }), async (req
 
 router.get('/', async (req, res) => {
     const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 5
+    const limit = parseInt(req.query.limit) || 20
+    const sortCount = parseInt(req.query.read_count) || -1
     const skip = (page - 1) * limit;
     try {
-        const articles = await ArticleModel.find().sort({ read_count: -1 }).skip(skip).limit(limit).exec()
+        const articles = await ArticleModel.find({ state: 'published' }).sort({ read_count: sortCount, timestamp: -1, reading_time: -1 }).skip(skip).limit(limit).exec()
         res.status(200).json(articles)
     } catch (error) {
-        res.status(500).json({message: error.message})
+        res.status(500).json({ message: error.message })
     }
 })
 
 router.get('/user', passport.authenticate('jwt', { session: false }), async (req, res) => {
-    const articles = await ArticleModel.find({ author: req.user._id })
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20
+    const skip = (page - 1) * limit;
+    const state = req.query.state || ['published', 'draft']
+    const articles = await ArticleModel.find({ author: req.user._id, state: state }).sort({ read_count: -1 }).skip(skip).limit(limit).exec()
+
     res.status(200).json(articles)
 })
 

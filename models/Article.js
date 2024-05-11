@@ -30,7 +30,7 @@ const articleSchema = new Schema({
         default: Date.now(),
         required: true
     },
-    reading_time: String,
+    reading_time: Number,
     state: {
         type: String,
         enum: ['draft', 'published'],

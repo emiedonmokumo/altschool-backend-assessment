@@ -20,7 +20,7 @@ router.post('/', (req, res, next) => {
 
                     const body = { _id: user._id, email: user.email }
 
-                    const token = jwt.sign({ user: body }, process.env.JWT_SECRET);
+                    const token = jwt.sign({ user: body, exp: 60 * 60 * 1000 }, process.env.JWT_SECRET);
 
                     return res.json({ token })
                 })
