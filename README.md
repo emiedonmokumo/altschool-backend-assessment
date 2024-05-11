@@ -9,26 +9,32 @@ This API provides endpoints for user authentication including signup and login u
 
 ## Signup
 
-- **URL**: `/api/auth/signup`
+### Create New User Account
+
+- **URL**: `/signup`
 - **Method**: `POST`
 - **Request Body**:
-  - `email`: User's email address (String)
-  - `password`: User's password (String)
-  - `firstname`: User's first name (String)
-  - `surname`: User's last name (String)
+  - `firstname`: First name of the user (String)
+  - `surname`: Surname of the user (String)
+  - `email`: Email address of the user (String)
+  - `password`: Password for the account (String)
 - **Response**: 
   - `message`: Success message
   - `user`: Newly created user object
 
 ## Login
 
-- **URL**: `/api/auth/login`
+### Authenticate User
+
+- **URL**: `/login`
 - **Method**: `POST`
 - **Request Body**:
-  - `email`: User's email address (String)
-  - `password`: User's password (String)
+  - `email`: Email address of the user (String)
+  - `password`: Password for the account (String)
 - **Response**: 
-  - `token`: JWT token for authentication
+  - `token`: JWT token for authenticated user
+
+---
 
 ## Passport Authentication Strategies
 
