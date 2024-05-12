@@ -86,6 +86,7 @@ To access protected routes, you need to authenticate using JSON Web Tokens (JWT)
   - `description`: String (required) - Brief description of the article
   - `state`: String (required) - State of the article (published/draft)
   - `body`: String (required) - Content of the article
+  - `tag`: List(required) - tags of the article [blog, writing, article]
 - **Response:**
   - `message`: String - Success message
   - `blog`: Object - Created article object
