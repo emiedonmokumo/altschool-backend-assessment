@@ -4,7 +4,7 @@
 ### https://altschool-backend-assessment.onrender.com/
 
 An API created with Express, Passport, JSON Web Token and MongoDB
-
+Absolutely Free 
 ---
 # Authentication API Documentation
 This API provides endpoints for user authentication including signup and login using email and password.
