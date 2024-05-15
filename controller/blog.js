@@ -46,52 +46,67 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/user', passport.authenticate('jwt', { session: false }), async (req, res) => {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 20
-    const skip = (page - 1) * limit;
-    const state = req.query.state || ['published', 'draft']
-    const articles = await ArticleModel.find({ author: req.user._id, state: state }).sort({ read_count: -1 }).skip(skip).limit(limit).exec()
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 20
+        const skip = (page - 1) * limit;
+        const state = req.query.state || ['published', 'draft']
+        const articles = await ArticleModel.find({ author: req.user._id, state: state }).sort({ read_count: -1 }).skip(skip).limit(limit).exec()
 
-    res.status(200).json(articles)
+        res.status(200).json(articles)
+    } catch (error) {
+        res.status(400).json({ Error: error.message })
+    }
 })
 
 router.get('/:id', async (req, res) => {
-    const article = await ArticleModel.findOne({ _id: req.params.id, state: 'published' });
+    try {
+        const article = await ArticleModel.findOne({ _id: req.params.id, state: 'published' });
 
-    await ArticleModel.updateOne({ _id: article._id }, { $inc: { read_count: 1 } }, { new: true })
+        await ArticleModel.updateOne({ _id: article._id }, { $inc: { read_count: 1 } }, { new: true })
 
-    const user = await UserModel.findById(article.author)
-    if (!article) {
-        res.status(400).json({ message: 'Published article not found' })
-    }
-    res.status(200).json({
-        article,
-        author: {
-            id: article.author,
-            name: `${user.firstname} ${user.surname}`,
-            email: user.email
+        const user = await UserModel.findById(article.author)
+        if (!article) {
+            res.status(400).json({ message: 'Published article not found' })
         }
-    })
+        res.status(200).json({
+            article,
+            author: {
+                name: `${user.firstname} ${user.surname}`,
+                email: user.email
+            }
+        })
+    } catch (error) {
+        res.status(400).json({ Error: error.message })
+    }
 })
 
 router.put('/:id', passport.authenticate('jwt', { session: false }), async (req, res) => {
-    const article = await ArticleModel.updateOne({ _id: req.params.id, author: req.user._id }, req.body, { new: true })
-    if (!article) {
-        res.status(400).json({
-            message: 'Unauthorized Access to Article'
+    try {
+        const article = await ArticleModel.updateOne({ _id: req.params.id, author: req.user._id }, req.body, { new: true })
+        if (!article) {
+            res.status(400).json({
+                message: 'Unauthorized Access to Article'
+            })
+        }
+        res.status(200).json({
+            message: `Article with the id ${req.params.id} Updated Successfully`,
+            article
         })
+    } catch (error) {
+        res.status(400).json({ Error: error.message })
     }
-    res.status(200).json({
-        message: `Article with the id ${req.params.id} Updated Successfully`,
-        article
-    })
 })
 
 router.delete('/:id', passport.authenticate('jwt', { session: false }), async (req, res) => {
-    const article = await ArticleModel.deleteOne({ author: req.user._id, _id: req.params.id })
-    res.status(200).json({
-        message: `Article with the id ${req.params.id} Deleted Successfully`,
-    })
+    try {
+        await ArticleModel.deleteOne({ author: req.user._id, _id: req.params.id })
+        res.status(200).json({
+            message: `Article with the id ${req.params.id} Deleted Successfully`,
+        })
+    } catch (error) {
+        res.status(400).json({ Error: error.message })
+    }
 })
 
 
