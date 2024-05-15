@@ -61,21 +61,13 @@ router.get('/user', passport.authenticate('jwt', { session: false }), async (req
 
 router.get('/:id', async (req, res) => {
     try {
-        const article = await ArticleModel.findOne({ _id: req.params.id, state: 'published' });
-
-        await ArticleModel.updateOne({ _id: article._id }, { $inc: { read_count: 1 } }, { new: true })
-
-        const user = await UserModel.findById(article.author)
+        const article = await ArticleModel.findOne({ _id: req.params.id, state:'published' });        
         if (!article) {
-            res.status(400).json({ message: 'Published article not found' })
+            res.status(400).json({ message: 'No Published Article found'})
+        } else {
+            await ArticleModel.updateOne({ _id: article._id }, { $inc: { read_count: 1 } }, { new: true })
+            res.status(200).json(article)
         }
-        res.status(200).json({
-            article,
-            author: {
-                name: `${user.firstname} ${user.surname}`,
-                email: user.email
-            }
-        })
     } catch (error) {
         res.status(400).json({ Error: error.message })
     }
