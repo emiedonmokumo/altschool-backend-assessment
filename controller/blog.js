@@ -66,7 +66,14 @@ router.get('/:id', async (req, res) => {
             res.status(400).json({ message: 'No Published Article found'})
         } else {
             await ArticleModel.updateOne({ _id: article._id }, { $inc: { read_count: 1 } }, { new: true })
-            res.status(200).json(article)
+            const user = await UserModel.findById(article.author)
+            res.status(200).json({
+                article,
+                author: {
+                    name: `${user.firstname} ${user.surname}`,
+                    email: user.email
+                }
+            })
         }
     } catch (error) {
         res.status(400).json({ Error: error.message })
